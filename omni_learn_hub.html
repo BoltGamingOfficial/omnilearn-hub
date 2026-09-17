@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniLearn Hub - Teachers want you to study. We make it easier</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4338ca;
+            --accent: #38bdf8;
+            --accent-purple: #6366f1;
+            --accent-gradient: linear-gradient(135deg, #6366f1, #a855f7);
+            --bg-dark: #0b1329;
+            --bg-card: #111c3a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #1e293b;
+            --border-color: #1e293b;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: rgba(11, 19, 41, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            background: var(--accent-gradient);
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--accent);
+            margin-top: 2px;
+            font-weight: 600;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 12px;
+            background: rgba(17, 28, 58, 0.9);
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-tab {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-tab.active, .nav-tab:hover {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 48px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .view-section {
+            display: none;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .view-section.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .controls-bar {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 16px 20px 16px 48px;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-purple);
+        }
+
+        .grades-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .grades-nav {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-purple) rgba(255, 255, 255, 0.05);
+        }
+
+        .grades-nav::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .grades-nav::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .grades-nav::-webkit-scrollbar-thumb {
+            background: var(--accent-purple);
+            border-radius: 4px;
+        }
+
+        .grade-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .grade-btn.active, .grade-btn:hover {
+            border-color: var(--accent-purple);
+            color: white;
+            background: rgba(99, 102, 241, 0.15);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+        }
+
+        .category-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 1.5rem 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+
+        .subject-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-purple);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            opacity: 0.7;
+        }
+
+        .subject-card.specialized::before {
+            background: var(--accent);
+        }
+
+        .subject-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        .subject-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            background: rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .subject-badge.specialized {
+            background: rgba(56, 189, 248, 0.2);
+            color: var(--accent);
+        }
+
+        /* Lessons View */
+        .back-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.2s;
+            width: fit-content;
+        }
+
+        .back-btn:hover {
+            background: var(--border-color);
+        }
+
+        .lessons-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 968px) {
+            .lessons-container {
+                grid-template-columns: 1fr;
+            }
+            main {
+                padding: 20px 16px;
+            }
+            header {
+                padding: 16px 20px;
+            }
+        }
+
+        .lessons-list {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .lesson-item {
+            padding: 0.85rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .lesson-item:hover, .lesson-item.active {
+            border-color: var(--accent-purple);
+            background: rgba(99, 102, 241, 0.15);
+            color: #a5b4fc;
+        }
+
+        .lesson-detail-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            min-height: 450px;
+        }
+
+        .lesson-detail-panel h2 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .lesson-summary {
+            line-height: 1.7;
+            color: #cbd5e1;
+            margin-bottom: 1.5rem;
+        }
+
+        .lesson-examples {
+            background: var(--bg-dark);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #93c5fd;
+            line-height: 1.6;
+        }
+
+        /* Calculator Styles */
+        .calculator-layout {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 968px) {
+            .calculator-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .calculator-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .calc-display {
+            width: 100%;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            padding: 1.2rem;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.8rem;
+            text-align: right;
+            margin-bottom: 1.25rem;
+            outline: none;
+            letter-spacing: 1px;
+            overflow-x: auto;
+        }
+
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .calc-btn {
+            background: #1e293b;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 14px 10px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .calc-btn:hover {
+            border-color: var(--accent-purple);
+            background: rgba(99, 102, 241, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area" onclick="switchTab('dashboard')">
+            <div class="logo-icon">Ω</div>
+            <div class="logo-text">
+                <h1>OmniLearn Hub</h1>
+                <p>Teachers want you to study. We make it easier.</p>
+            </div>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" id="tabBtnDashboard" onclick="switchTab('dashboard')">Catalogo Completo</button>
+            <button class="nav-tab" id="tabBtnCalculator" onclick="switchTab('calculator')">Calcolatrice Scientifica</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- DASHBOARD TAB -->
+        <section id="dashboard" class="view-section active">
+            <div class="controls-bar">
+                <span style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted);">🔍</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="Cerca materia in tutto il database scolastico..." oninput="filterSubjects()">
+            </div>
+
+            <div class="grades-wrapper">
+                <div class="grades-nav" id="gradesNav">
+                    <button class="grade-btn active" onclick="setGradeFilter('all', this)">Tutti i Gradi</button>
+                    <button class="grade-btn" onclick="setGradeFilter('Prima Media', this)">Prima Media</button>
+                    <button class="grade-btn" onclick="setGradeFilter('Seconda Media', this)">Seconda Media</button>
+                    <button class="grade-btn" onclick="setGradeFilter('Terza Media', this)">Terza Media</button>
+                    <button class="grade-btn" onclick="setGradeFilter('Prima Superiore', this)">Prima Superiore</button>
+                    <button class="grade-btn" onclick="setGradeFilter('Seconda Superiore', this)">Seconda Superiore</button>
+                    <button class="grade-btn" onclick="setGradeFilter('Terza Superiore', this)">Terza Superiore</button>
+                    <button class="grade-btn" onclick="setGradeFilter('Quarta Superiore', this)">Quarta Superiore</button>
+                    <button class="grade-btn" onclick="setGradeFilter('Quinta Superiore', this)">Quinta Superiore</button>
+                    <button class="grade-btn" onclick="setGradeFilter('Specializzato', this)">Specialistici / Universitari</button>
+                </div>
+            </div>
+
+            <div id="subjectsContainer"></div>
+        </section>
+
+        <!-- LESSONS VIEW -->
+        <section id="lessonsView" class="view-section">
+            <button class="back-btn" onclick="switchTab('dashboard')">← Torna al Catalogo</button>
+            <div id="lessonsHeader"></div>
+            
+            <div class="lessons-container">
+                <div class="lessons-list">
+                    <input type="text" id="lessonSearchInput" class="search-input" placeholder="Cerca tra tutte le lezioni..." oninput="filterLessonsList()" style="width: 100%; margin-bottom: 1rem; padding: 12px 16px;">
+                    <div id="lessonsSidebarList"></div>
+                </div>
+                <div class="lesson-detail-panel" id="lessonDetailPanel">
+                    <div class="output-placeholder">Seleziona una lezione dalla lista per visualizzare il programma completo ed esempi.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CALCULATOR TAB -->
+        <section id="calculator" class="view-section">
+            <div style="max-width: 1280px; margin: 0 auto; width: 100%;">
+                <div class="calculator-layout">
+                    
+                    <!-- Left Panel: Calcolatrice Scientifica -->
+                    <div class="calculator-panel">
+                        <h2 style="font-size: 1.25rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <span>🔢</span> Calcolatrice Scientifica Ultra-Precisa
+                        </h2>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem; line-height: 1.4;">
+                            Supporta potenze (**), radici con indice personalizzato, funzioni trigonometriche e alta precisione decimale.
+                        </p>
+
+                        <div class="calc-display" id="calcDisplay">0</div>
+
+                        <div class="calc-buttons">
+                            <!-- Row 1 -->
+                            <button class="calc-btn" style="background: #ef4444; color: white; border: none;" onclick="clearCalc()">AC</button>
+                            <button class="calc-btn" style="background: #ef4444; color: white; border: none;" onclick="backspaceCalc()">⌫</button>
+                            <button class="calc-btn" style="background: #0ea5e9; color: white; border: none;" onclick="appendCalc('(')">(</button>
+                            <button class="calc-btn" style="background: #0ea5e9; color: white; border: none;" onclick="appendCalc(')')">)</button>
+                            <button class="calc-btn" style="background: #6366f1; color: white; border: none;" onclick="appendCalc('/')">÷</button>
+
+                            <!-- Row 2 -->
+                            <button class="calc-btn" style="background: #0ea5e9; color: white; border: none;" onclick="appendCalc('**')">x^y</button>
+                            <button class="calc-btn" style="background: #0ea5e9; color: white; border: none;" onclick="appendCalc('Math.sqrt(')">√</button>
+                            <button class="calc-btn" style="background: #0ea5e9; color: white; border: none;" onclick="appendCalc('root(')">n√x</button>
+                            <button class="calc-btn" style="background: #0ea5e9; color: white; border: none;" onclick="appendCalc('Math.PI')">π</button>
+                            <button class="calc-btn" style="background: #6366f1; color: white; border: none;" onclick="appendCalc('*')">×</button>
+
+                            <!-- Row 3 -->
+                            <button class="calc-btn" style="background: #0ea5e9; color: white; border: none;" onclick="appendCalc('Math.sin(')">sin</button>
+                            <button class="calc-btn" onclick="appendCalc('7')">7</button>
+                            <button class="calc-btn" onclick="appendCalc('8')">8</button>
+                            <button class="calc-btn" onclick="appendCalc('9')">9</button>
+                            <button class="calc-btn" style="background: #6366f1; color: white; border: none;" onclick="appendCalc('-')">-</button>
+
+                            <!-- Row 4 -->
+                            <button class="calc-btn" style="background: #0ea5e9; color: white; border: none;" onclick="appendCalc('Math.cos(')">cos</button>
+                            <button class="calc-btn" onclick="appendCalc('4')">4</button>
+                            <button class="calc-btn" onclick="appendCalc('5')">5</button>
+                            <button class="calc-btn" onclick="appendCalc('6')">6</button>
+                            <button class="calc-btn" style="background: #6366f1; color: white; border: none;" onclick="appendCalc('+')">+</button>
+
+                            <!-- Row 5 -->
+                            <button class="calc-btn" style="background: #0ea5e9; color: white; border: none;" onclick="appendCalc('Math.tan(')">tan</button>
+                            <button class="calc-btn" onclick="appendCalc('1')">1</button>
+                            <button class="calc-btn" onclick="appendCalc('2')">2</button>
+                            <button class="calc-btn" onclick="appendCalc('3')">3</button>
+                            <button class="calc-btn" style="background: #0ea5e9; color: white; border: none;" onclick="appendCalc('Math.E')">e</button>
+
+                            <!-- Row 6 -->
+                            <button class="calc-btn" style="grid-column: span 2;" onclick="appendCalc('0')">0</button>
+                            <button class="calc-btn" onclick="appendCalc('.')">.</button>
+                            <button class="calc-btn" style="grid-column: span 2; background: var(--accent-gradient); color: white; border: none;" onclick="calculateResult()">=</button>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel: Storico Calcoli -->
+                    <div class="calculator-panel" style="min-height: 485px; display: flex; flex-direction: column;">
+                        <h2 style="font-size: 1.25rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <span>📋</span> Storico Calcoli
+                        </h2>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">
+                            I calcoli ad alta precisione verranno salvati qui sotto in tempo reale.
+                        </p>
+
+                        <div id="calcHistory" style="flex: 1; background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.25rem; overflow-y: auto; color: var(--text-muted); font-style: italic; font-size: 0.95rem;">
+                            Nessun calcolo eseguito di recente. Usa il tastierino a sinistra per iniziare.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const schoolDatabase = {
+            "Prima Media": {
+                "Matematica": [
+                    { title: "1. I numeri naturali e la numerazione decimale", summary: "I numeri naturali costituiscono la base del nostro sistema di conteggio e servono per indicare quantità intere. Il sistema di numerazione decimale si basa sulle potenze di dieci, il che significa che ogni cifra assume un valore diverso a seconda della posizione che occupa, come unità, decine o centinaia.", example: "Esempio: Nel numero 1.234,56 la cifra 1 vale migliaia, il 2 centinaia, il 3 decine, il 4 unità, mentre dopo la virgola il 5 rappresenta i decimi e il 6 i centesimi." },
+                    { title: "2. Le quattro operazioni fondamentali", summary: "Le operazioni aritmetiche fondamentali sono l'addizione, la sottrazione, la moltiplicazione e la divisione. Ciascuna di esse è regolata da proprietà matematiche precise che semplificano il calcolo e permettono di manipolare le espressioni numeriche in modo sicuro.", example: "Esempio: La proprietà commutativa dell'addizione stabilisce che cambiando l'ordine degli addendi il risultato non cambia, quindi a + b = b + a." },
+                    { title: "3. Le potenze e le loro proprietà", summary: "La potenza di un numero rappresenta una moltiplicazione ripetuta in cui la base viene moltiplicata per se stessa tante volte quanto indica l'esponente. Le proprietà delle potenze permettono di eseguire calcoli complessi con grandi numeri in modo rapido e senza errori.", example: "Esempio: Nel calcolo 2^3 * 2^2, avendo la stessa base, si sommano gli esponenti ottenendo 2^(3+2) = 2^5 = 32." },
+                    { title: "4. Multipli, divisori, M.C.D. e m.c.m.", summary: "Un multiplo si ottiene moltiplicando un numero per un intero qualsiasi, mentre un divisore è un numero che divide esattamente un altro senza resto. Il Massimo Comune Divisore e il minimo comune multiplo sono strumenti indispensabili per confrontare e semplificare le frazioni.", example: "Esempio: Il M.C.D. tra 12 e 18 è 6, poiché è il numero più grande che divide esattamente entrambi i valori." },
+                    { title: "5. Frazioni e numeri razionali", summary: "Una frazione rappresenta una o più parti uguali in cui è stato diviso un intero, ed è formata da un numeratore e un denominatore. Le frazioni si distinguono in proprie, improprie e apparenti a seconda del rapporto tra questi due valori, e permettono di esprimere numeri razionali non interi.", example: "Esempio: Sommando tre quarti e un quarto (3/4 + 1/4), otteniamo quattro quarti (4/4), che equivale esattamente all'intero 1." },
+                    { title: "6. Introduzione ai numeri decimali periodici", summary: "Quando si divide il numeratore di una frazione per il suo denominatore, si ottiene un numero decimale che può essere finito o periodico. Un numero decimale periodico presenta una o più cifre dopo la virgola che si ripetono all'infinito senza mai fermarsi.", example: "Esempio: Dividendo 1 per 3 si ottiene 0,333..., dove il 3 è la cifra periodica che si ripete all'infinito." },
+                    { title: "7. Rapporti e proporzioni", summary: "Un rapporto è il quoziente tra due numeri e confronta due grandezze tra loro, mentre una proporzione è un'uguaglianza tra due rapporti. La proprietà fondamentale delle proporzioni afferma che il prodotto dei medi è sempre uguale al prodotto degli estremi.", example: "Esempio: Nella proporzione x : 4 = 15 : 20, per trovare il valore incognito si moltiplicano i medi e si divide per l'estremo noto: x = (4 * 15) / 20 = 3." },
+                    { title: "8. Percentuali e sconti", summary: "Le percentuali sono particolari frazioni che hanno come denominatore cento e servono per esprimere una parte rispetto a un totale di cento unità. Vengono ampiamente applicate nella vita quotidiana per calcolare sconti commerciali, interessi bancari o variazioni statistiche.", example: "Esempio: Il 20% di 150 si calcola moltiplicando 150 per 20 e dividendo il risultato per 100, ottenendo 30." }
+                ],
+                "Geometria": [
+                    { title: "1. Enti geometrici fondamentali", summary: "La geometria euclidea parte da concetti primitivi non definiti ma intuitivi come il punto, che non ha dimensioni, la retta, che si estende all'infinito in entrambe le direzioni, e il piano. Da questi elementi basilari si costruiscono segmenti, semirette e figure geometriche più complesse.", example: "Esempio: Dati due segmenti consecutivi AB e BC sulla stessa retta, la loro somma corrisponde al segmento totale AC." },
+                    { title: "2. Gli angoli e la loro misura", summary: "Un angolo è la parte di piano compresa tra due semirette che hanno la stessa origine chiamata vertice. Gli angoli si misurano in gradi e si classificano in acuti, retti, ottusi o piatti a seconda della loro ampiezza rispetto ai novanta e centottanta gradi.", example: "Esempio: Due angoli si dicono complementari quando la somma delle loro ampiezze è esattamente di 90 gradi." },
+                    { title: "3. I poligoni: elementi e proprietà", summary: "Un poligono è una figura geometrica piana delimitata da una linea spezzata chiusa formata da segmenti consecutivi chiamati lati. I poligoni vengono classificati in base al numero dei loro lati e godono di importanti proprietà relative alla somma degli angoli interni.", example: "Esempio: In qualsiasi triangolo la somma degli angoli interni è sempre costante e pari a 180 gradi." },
+                    { title: "4. I triangoli e i criteri di congruenza", summary: "Il triangolo è il poligono con il minor numero di lati ed è una figura rigida fondamentale nello studio della geometria. I criteri di congruenza permettono di stabilire con certezza se due triangoli sono perfettamente identici confrontando lati e angoli.", example: "Esempio: Il primo criterio di congruenza (LAL) stabilisce che due triangoli sono uguali se hanno due lati e l'angolo tra essi compreso rispettivamente uguali." },
+                    { title: "5. I quadrilateri notevoli", summary: "I quadrilateri sono poligoni formati da quattro lati e quattro angoli, tra cui spiccano figure con particolari simmetrie e parallelismi come il parallelogramma, il rettangolo, il rombo e il quadrato. Ciascuno di essi possiede formule specifiche per il calcolo del perimetro e dell'area.", example: "Esempio: Il quadrato è il quadrilatero regolare per eccellenza, caratterizzato da quattro lati uguali, quattro angoli retti e diagonali tra loro perpendicolari." }
+                ],
+                "Italiano / Grammatica": [
+                    { title: "1. Fonologia e ortografia", summary: "L'ortografia studia le regole fondamentali per scrivere correttamente le parole di una lingua utilizzando l'alfabeto, i segni di interpunzione e gli accenti. Una corretta padronanza di questi elementi evita ambiguità di significato e garantisce la chiarezza della comunicazione scritta.", example: "Esempio: L'accento distingue la voce verbale 'è' (del verbo essere) dalla congiunzione semplice 'e'." },
+                    { title: "2. Il nome (o sostantivo)", summary: "Il nome è la parte variabile del discorso che serve a indicare persone, animali, oggetti, luoghi o concetti astratti presenti nella realtà o nel pensiero. I nomi si suddividono in numerose categorie grammaticali, come comuni o propri, concreti o astratti, primitivi o derivati.", example: "Esempio: La parola 'sciame' è un nome collettivo perché, pur essendo al singolare, indica un insieme numeroso di api." },
+                    { title: "3. L'articolo determinativo e indeterminativo", summary: "L'articolo è una particella che precede il nome determinandone il genere, il numero e il grado di conoscenza da parte di chi ascolta. Gli articoli determinativi indicano elementi specifici e noti, mentre quelli indeterminativi si riferiscono a elementi generici.", example: "Esempio: Si usa l'articolo indeterminativo 'uno' davanti a parole che iniziano per s impura seguita da consonante, come nello 'studente'." },
+                    { title: "4. L'aggettivo qualificativo e determinativo", summary: "L'aggettivo è quella parte del discorso che si unisce al nome per qualificarne le caratteristiche o determinarne il possesso e la posizione nello spazio. Gli aggettivi qualificativi possiedono anche dei gradi di intensità, come il comparativo e il superlativo.", example: "Esempio: Il superlativo assoluto dell'aggettivo 'buono' non si forma regolarmente con i suffissi, ma diventa direttamente l'eccezione 'ottimo'." },
+                    { title: "5. Il pronome personale e possessivo", summary: "Il pronome è una parola che sostituisce un nome all'interno della frase per evitare ripetizioni e rendere il discorso più scorrevole ed elegante. I pronomi personali indicano le persone che partecipano alla comunicazione, distinguendo chi parla, chi ascolta e di chi si parla.", example: "Esempio: Nella frase 'Io studio volentieri', la parola 'Io' funge da pronome personale con funzione di soggetto." },
+                    { title: "6. Il verbo: coniugazioni e modi", summary: "Il verbo è l'elemento centrale e più importante della frase, in quanto esprime un'azione, un evento o una condizione riferita al soggetto. I verbi italiani si dividono in tre coniugazioni principali e possiedono modi finiti e indefiniti che specificano il tempo.", example: "Esempio: L'indicativo presente, l'imperfetto e il passato remoto appartengono tutti ai modi finiti del verbo." },
+                    { title: "7. Analisi logica: Soggetto, Predicato e Attributo", summary: "L'analisi logica scompone la frase semplice individuandone le funzioni sintattiche fondamentali per comprendere chi compie l'azione e cosa fa. I pilastri portanti sono il soggetto, che compie l'azione, e il predicato, che la descrive.", example: "Esempio: Nella frase 'Il gatto nero dorme', 'gatto' è il soggetto, 'nero' è l'attributo e 'dorme' è il predicato verbale." }
+                ],
+                "Storia": [
+                    { title: "1. La Preistoria e il Paleolitico", summary: "La Preistoria rappresenta il lunghi periodo della storia umana che precede l'invenzione della scrittura ed è caratterizzato dall'evoluzione biologica e culturale dell'uomo. Durante il Paleolitico gli esseri umani vivevano di caccia e raccolta, praticando il nomadismo e scoprendo l'uso fondamentale del fuoco.", example: "Esempio: Le tappe evolutive principali includono specie fondamentali come l'Homo habilis e l'Homo sapiens." },
+                    { title: "2. Il Neolitico e la rivoluzione agricola", summary: "Il Neolitico segna una svolta epocale nella storia umana grazie alla scoperta dell'agricoltura e dell'addomesticamento degli animali domestici. Questo passaggio impose agli uomini di abbandonare il nomadismo per fondare i primi villaggi stabili, dando vita a nuove tecnologie come la ceramica.", example: "Esempio: L'invenzione della tessitura e della ceramica permise la conservazione dei cibi e la produzione di vestiti più complessi." },
+                    { title: "3. Le civiltà della Mesopotamia", summary: "La Mesopotamia, la terra fertile situata tra i fiumi Tigri ed Eufrate, vide fiorire alcune tra le prime e più grandi civiltà urbane della storia antica. Popoli come i Sumeri, i Babilonesi e gli Assiri svilupparono una complessa organizzazione politica e la prima forma di scrittura.", example: "Esempio: I Sumeri inventarono la scrittura cuneiforme, incisa con uno stilo su tavolette d'argilla fresca." },
+                    { title: "4. L'Antico Egitto", summary: "La civiltà egizia nacque e si sviluppò lungo le rive fertili del fiume Nilo, che ogni anno garantiva abbondanti raccolti grazie alle sue piene regolari. Gli egizi edificarono una società fortemente centralizzata guidata dai faraoni e caratterizzata da una complessa religione politeista e dalla costruzione di imponenti monumenti funerari.", example: "Esempio: La scrittura geroglifica era utilizzata principalmente per iscrizioni monumentali e testi sacri." },
+                    { title: "5. I Fenici e gli Ebrei", summary: "I Fenici furono un popolo di eccellenti navigatori e mercanti insediatisi lungo la costa del Mediterraneo orientale, fondando importanti empori commerciali in tutto il bacino. A loro si deve l'invenzione rivoluzionaria del primo alfabeto fonetico a ventidue lettere, che semplificò notevolmente la comunicazione scritta.", example: "Esempio: L'alfabeto fenicio fu la base da cui derivarono sia l'alfabeto greco che quello latino moderno." },
+                    { title: "6. La civiltà greca: dalle origini alla polis", summary: "La civiltà greca fiorì nella penisola balcanica e nelle isole dell'Egeo attraverso la fondazione delle poleis, ovvero città-stato indipendenti dotate di proprie leggi. Atene e Sparta rappresentano i modelli opposti di questa civiltà, oscillando tra la democrazia culturale e l'oligarchia militare.", example: "Esempio: La democrazia ateniese garantiva la partecipazione diretta dei cittadini liberi alle decisioni politiche dell'Assemblea." }
+                ],
+                "Geografia": [
+                    { title: "1. Gli strumenti della geografia", summary: "La geografia studia il territorio e la sua interazione con le attività umane attraverso l'uso di strumenti cartografici avanzati e sistemi di coordinate. Le carte geografiche utilizzano scale di riduzione per rappresentare la superficie terrestre su un piano, sfruttando un reticolo di meridiani e paralleli.", example: "Esempio: La latitudine misura la distanza angolare di un punto dall'equatore, mentre la longitudine misura la distanza dal meridiano di Greenwich." },
+                    { title: "2. L'atmosfera e il clima", summary: "L'atmosfera è l'involucro gassoso che circonda la Terra e regola le condizioni climatiche fondamentali per la sopravvivenza di tutte le specie viventi. I fattori climatici come la temperatura, la pressione atmosferica e l'umidità determinano le diverse fasce climatiche del pianeta.", example: "Esempio: L'effetto serra è un fenomeno naturale fondamentale che trattiene il calore solare, impedendo al pianeta di congelare." },
+                    { title: "3. Idrosfera: mari, oceani e corsi d'acqua", summary: "L'idrosfera comprende l'insieme di tutte le risorse idriche presenti sulla Terra, inclusi oceani, mari, fiumi, laghi e falde sotterranee. Il ciclo dell'acqua descrive il movimento continuo dell'acqua tra la superficie terrestre e l'atmosfera attraverso evaporazione e precipitazione.", example: "Esempio: Il bacino idrografico rappresenta l'area di territorio i cui deflussi d'acqua confluiscono tutti nello stesso fiume principale." },
+                    { title: "4. L'Italia fisica e politica", summary: "Il territorio italiano presenta una morfologia fisica estremamente varia e complessa, dominata dalla catena montuosa delle Alpi a nord e dalla dorsale appenninica. Dal punto di vista politico, l'Italia è una repubblica divisa in regioni, province e comuni con una fitta rete urbana.", example: "Esempio: La Pianura Padana, situata tra le Alpi e gli Appennini, costituisce la pianura alluvionale più estesa e produttiva del paese." }
+                ],
+                "Scienze": [
+                    { title: "1. Il metodo scientifico sperimentale", summary: "Il metodo scientifico sperimentale, introdotto da Galileo Galilei, costituisce la base fondamentale della scienza moderna per indagare i fenomeni naturali. Esso si basa sull'osservazione rigorosa, sulla formulazione di ipotesi verificabili, sull'esecuzione di esperimenti ripetibili e sulla formulazione di leggi matematiche.", example: "Esempio: Un'ipotesi scientifica deve poter essere smentita o confermata attraverso dati sperimentali oggettivi." },
+                    { title: "2. La materia e i suoi stati", summary: "Tutto ciò che ci circonda e che possiede una massa e un volume è definito materia, la quale si presenta comunemente in tre stati fisici principali. Le particelle che compongono la materia possono trovarsi in stato solido, liquido o aeriforme a seconda dell'intensità delle forze di legame.", example: "Esempio: I passaggi di stato avorono assorbendo o rilasciando calore, come nel caso della fusione del ghiaccio o dell'evaporazione dell'acqua." },
+                    { title: "3. L'acqua e le sue proprietà", summary: "L'acqua è una molecola fondamentale per la vita sul pianeta e copre la maggior parte della superficie terrestre con caratteristiche chimiche uniche. Viene definita solvente universale perché è in grado di sciogliere un numero elevatissimo di sostanze chimiche.", example: "Esempio: Una soluzione acquosa è formata da un soluto sciolto uniformemente all'interno di un solvente liquido come l'acqua." },
+                    { title: "4. Il regno dei viventi e la cellula", summary: "Tutti gli esseri viventi condividono caratteristiche biologiche comuni e sono costituiti da unità strutturali di base chiamate cellule. La cellula rappresenta la più piccola unità autonoma capace di compiere tutte le funzioni vitali.", example: "Esempio: Le cellule animali e vegetali condividono molti organuli interni, ma solo quelle vegetali possiedono una parete cellulare rigida e i cloroplasti." }
+                ],
+                "Inglese": [
+                    { title: "1. Verb To Be and To Have Got", summary: "I verbi 'to be' (essere) e 'to have got' (avere) sono i pilastri fondamentali della lingua inglese e vengono utilizzati continuamente per presentarsi e descrivere oggetti. La loro coniugazione al presente indicativo è irregolare e va memorizzata fin dalle prime lezioni.", example: "Esempio: Si dice 'I am Italian' per indicare la nazionalità e 'I have got a dog' per indicare il possesso di un animale." },
+                    { title: "2. Present Simple (Affirmative, Negative, Interrogative)", summary: "Il Present Simple è il tempo verbale inglese utilizzato per descrivere azioni abituali, routine quotidiane, verità generali o preferenze stabili nel tempo. Nella forma affermativa alla terza persona singolare si aggiunge sempre una s finale al verbo.", example: "Esempio: La frase 'I get up at 7 o'clock every day' descrive un'abitudine quotidiana ricorrente." },
+                    { title: "3. Prepositions of time and place", summary: "Le preposizioni di tempo e di luogo in inglese (IN, ON, AT) regolano la collocazione degli eventi e degli oggetti all'interno di una frase. Ciascuna di esse si usa seguendo regole precise legate alla precisione temporale o spaziale.", example: "Esempio: Si usa la preposizione 'at' per gli orari precisi (at 5 PM), 'on' per i giorni della settimana e 'in' per i mesi o le città." },
+                    { title: "4. Demonstrative pronouns and Plurals", summary: "I pronomi dimostrativi inglesi (this, that, these, those) servono a indicare la posizione di persone o oggetti vicini o lontani nello spazio e nel tempo. La formazione dei plurali dei sostantivi segue regole regolari con l'aggiunta di s, ma presenta anche molte eccezioni storiche.", example: "Esempio: Il plurale del sostantivo irregolare 'child' (bambino) diventa 'children' senza aggiungere la semplice s finale." }
+                ]
+            },
+            "Seconda Media": {
+                "Matematica": [
+                    { title: "1. Insieme dei numeri relativi (Z)", summary: "L'insieme dei numeri relativi comprende sia i numeri interi positivi preceduti dal segno più, sia i numeri interi negativi preceduti dal segno meno, oltre allo zero. Questo ampliamento dell'insieme numerico permette di esprimere situazioni reali come debiti, temperature sotto zero o altitudini sotto il livello del mare.", example: "Esempio: L'operazione tra numeri relativi (-8) + (+3) dà come risultato -5, poiché ci si sposta verso i valori negativi sulla retta numerica." },
+                    { title: "2. Operazioni con i numeri relativi", summary: "Le operazioni aritmetiche con i numeri relativi richiedono l'applicazione rigorosa della regola dei segni per determinare correttamente il segno del risultato finale. Nella moltiplicazione e nella divisione, segni concordi danno sempre un risultato positivo, mentre segni discordi danno un risultato negativo.", example: "Esempio: Moltiplicando due numeri negativi come (-4) per (-5) si ottiene un valore positivo pari a +20." },
+                    { title: "3. Introduzione al calcolo letterale", summary: "Il calcolo letterale estende l'aritmetica introducendo l'uso delle lettere dell'alfabeto per rappresentare numeri generici o valori sconosciuti. Questa astrazione matematica permette di esprimere formule generali, proprietà universali ed equazioni valide per qualsiasi valore numerico.", example: "Esempio: Sostituendo il valore numerico assegnato alla lettera x all'interno di un'espressione letterale si calcola il valore complessivo dell'espressione." },
+                    { title: "4. I Monomi: operazioni e grado", summary: "Un monomio è un'espressione algebrica letterale in cui compaiono soltanto moltiplicazioni tra numeri e lettere con esponenti naturali. Il grado di un monomio è dato dalla somma di tutti gli esponenti delle sue parti letterali, ed esistono regole precise per addizionarli o moltiplicarli.", example: "Esempio: Moltiplicando i monomi 3a^2 e 4a^3 si moltiplicano i coefficienti numerici e si sommano gli esponenti della stessa lettera, ottenendo 12a^5." },
+                    { title: "5. I Polinomi", summary: "Un polinomio è una somma algebrica di due o più monomi non simili tra loro, che costituiscono i singoli termini dell'espressione polinomiale. Attraverso particolari regole di scompongono e si utilizzano i prodotti notevoli per semplificare notevolmente i calcoli algebrici complessi.", example: "Esempio: Il prodotto notevole della somma per la differenza di due termini, (a+b)(a-b), restituisce sempre la differenza di quadrati a^2 - b^2." },
+                    { title: "6. Statistica descrittiva", summary: "La statistica descrittiva raccoglie, analizza e sintetizza grandi quantità di dati numerici per descrivere fenomeni sociali, economici o scientifici. Gli indicatori statistici principali comprendono la media aritmetica, la moda e la mediana, affiancati da grafici visivi intuitivi.", example: "Esempio: Il calcolo della media aritmetica si effettua sommando tutti i valori numerici raccolti e dividendo il totale per il numero complessivo delle osservazioni." }
+                ],
+                "Geometria": [
+                    { title: "1. Teorema di Pitagora e applicazioni", summary: "Il Teorema di Pitagora stabilisce una relazione geometrica fondamentale valida esclusivamente per i triangoli rettangoli. Esso afferma che l'area del quadrato costruito sull'ipotenusa è sempre uguale alla somma delle aree dei quadrati costruiti sui due cateti.", example: "Esempio: Conoscendo l'ipotenusa e un cateto, la misura dell'altro cateto si calcola facendo la radice quadrata della loro differenza al quadrato." },
+                    { title: "2. Applicazioni di Pitagora alle figure piane", summary: "Il Teorema di Pitagora non si limita ai triangoli rettangoli isolati, ma può essere applicato all'interno di molte altre figure geometriche piane. Tracciando altezze o diagonali opportune, è possibile suddividere poligoni complessi in triangoli rettangoli utilizzabili per calcolare lati ignoti.", example: "Esempio: Il teorema si applica direttamente per determinare l'altezza di un triangolo isoscele conoscendo il lato obliquo e la metà della base." },
+                    { title: "3. La similitudine tra poligoni", summary: "Due figure geometriche si dicono simili quando mantengono esattamente la stessa forma geometrica pur avendo dimensioni complessive diverse. Il Teorema di Talete e i criteri di similitudine mettono in relazione i lati omologhi attraverso un rapporto costante.", example: "Esempio: Il rapporto di similitudine k stabilisce la proporzionalità diretta tra i lati corrispondenti di due poligoni simili." },
+                    { title: "4. Area del cerchio e parti di esso", summary: "Il cerchio è una figura piana delimitata da una linea chiusa chiamata circonferenza, i cui punti si trovano tutti alla stessa distanza dal centro. Le formule geometriche consentono di calcolare sia la lunghezza della circonferenza che l'estensione dell'area interna e dei suoi settori circolari.", example: "Esempio: La lunghezza della circonferenza si calcola moltiplicando il doppio del raggio per la costante pi greco (2 * pi * r)." }
+                ],
+                "Italiano / Grammatica": [
+                    { title: "1. Analisi del periodo: La proposizione principale", summary: "L'analisi del periodo scompone un testo complesso formato da più frasi collegate tra loro per comprenderne la struttura logica e sintattica. La proposizione principale è il fulcro indipendente del periodo e possiede senso compiuto anche senza l'ausilio di altre frasi.", example: "Esempio: La frase 'Vengo subito da te' costituisce una proposizione principale autonoma e indipendente." },
+                    { title: "2. Le proposizioni coordinate", summary: "Le proposizioni coordinate sono frasi collegate alla principale o a un'altra subordinata mantenendo lo stesso livello sintattico e la stessa importanza gerarchica. La coordinazione può avvenire per congiunzione esplicita o semplicemente tramite segni di punteggiatura.", example: "Esempio: Nella frase 'Studio ma sono stanco', la seconda proposizione è coordinata avversativa rispetto alla prima." },
+                    { title: "3. Le subordinate oggettive e soggettive", summary: "Le proposizioni subordinate dipendono da una frase principale e svolgono la funzione di completarne il significato all'interno del periodo. Le soggettive fanno da soggetto alla reggente, mentre le oggettive ne rappresentano il complemento oggetto diretto.", example: "Esempio: Nella frase 'Voglio che tu studi', la proposizione secondaria 'che tu studi' svolge la funzione di oggettiva." },
+                    { title: "4. Subordinate causali, finali e consecutive", summary: "Le proposizioni subordinate circostanziali arricchiscono il periodo specificando la causa, lo scopo o la conseguenza di quanto espresso nella frase reggente. Ciascuna di esse è introdotta da congiunzioni o locuzioni specifiche.", example: "Esempio: La frase 'Corro per arrivare in orario' contiene una proposizione subordinata finale che esprime lo scopo dell'azione." }
+                ],
+                "Storia": [
+                    { title: "1. La caduta dell'Impero Romano d'Occidente", summary: "La caduta dell'Impero Romano d'Occidente segna tradizionalmente la fine dell'età antica e l'inizio del Medioevo in Europa. Il processo fu causato da gravi crisi economiche interne, corruzione politica e dalle imponenti migrazioni di popolazioni germaniche verso i confini imperiali.", example: "Esempio: L'anno 476 d.C. viene storicamente ricordato perché il generale germanico Odoacre depose l'ultimo imperatore Romolo Augustolo." },
+                    { title: "2. L'Impero Bizantino e Giustiniano", summary: "Mentre l'Occidente si frammentava in regni romano-barbarici, la parte orientale dell'Impero Romano continuò a prosperare con il nome di Impero Bizantino. Sotto il regno dell'imperatore Giustiniano si tentò la riconquista dei vecchi territori mediterranei e si redasse un codice giuridico fondamentale.", example: "Esempio: Il celebre codice giuridico 'Corpus Iuris Civilis' ha rappresentato la base del diritto europeo moderno." },
+                    { title: "3. I Longobardi in Italia", summary: "I Longobardi furono una popolazione germanica guerriera che invase la penisola italiana nel VI secolo, insediandosi prevalentemente nel nord e nel centro del territorio. Dopo un periodo iniziale di forte scontro con la popolazione romana e la Chiesa, si avviò una graduale integrazione culturale e religiosa.", example: "Esempio: L'Editto di Rotari del 643 d.C. fu la prima raccolta scritta delle leggi tradizionali longobarde in lingua latina." },
+                    { title: "4. L'Islam e l'espansione araba", summary: "Nel VII secolo nacque nella penisola arabica la religione islamica grazie alla predicazione del profeta Maometto, unificando le tribù arabe sotto un'unica fede monoteista. In breve tempo gli arabi diedero vita a una straordinaria espansione militare e culturale che investì tutto il Medio Oriente e il Nord Africa.", example: "Esempio: L'Egira, ovvero la fuga di Maometto da La Mecca a Medina nel 622 d.C., segna l'anno iniziale del calendario islamico." },
+                    { title: "5. Carlo Magno e la nascita del Sacro Romano Impero", summary: "Carlo Magno, re dei Franchi, unificò gran parte dell'Europa occidentale attraverso una serie di campagne militari e fu incoronato imperatore dal Papa nella notte di Natale dell'anno 800. Nacque così il Sacro Romano Impero, un'istituzione che univa il potere politico germanico alla tradizione cristiana.", example: "Esempio: La riforma carolingia promosse l'istruzione nei monasteri e diffuse una scrittura chiara e uniforme detta minuscola carolina." },
+                    { title: "6. Il feudalesimo e l'economia curtense", summary: "Durante l'Alto Medioevo l'Europa si organizzò attorno al sistema economico della curtis e al sistema politico-sociale del feudalesimo. Il re concedeva terre ai nobili vassalli in cambio di fedeltà militare, mentre i contadini lavoravano la terra del signore locale offrendo prestazioni d'opera.", example: "Esempio: Il rapporto di vassallaggio si basava su un solenne giuramento di fedeltà reciproca tra il sovrano e il nobile." }
+                ],
+                "Scienze": [
+                    { title: "1. La cellula: anatomia e funzioni", summary: "La cellula è l'unità fondamentale di tutti gli organismi viventi e racchiude al suo interno strutture specializzate chiamate organuli che svolgono funzioni vitali. All'interno del citoplasma si trovano i mitocondri, che producono energia, e il nucleo, che custodisce le informazioni genetiche.", example: "Esempio: Una differenza fondamentale tra cellula animale e vegetale risiede nella presenza di vacuoli più ampi e della parete rigida nelle piante." },
+                    { title: "2. La fotosintesi clorofilliana e la respirazione", summary: "La fotosintesi clorofilliana è il processo biochimico attraverso cui le piante verdi sfruttano la luce solare per trasformare anidride carbonica e acqua in zuccheri ed ossigeno. La respirazione cellulare rappresenta il processo inverso attraverso cui gli organismi ricavano energia chimica vitale.", example: "Esempio: L'equazione chimica riassume la fotosintesi: 6CO2 + 6H2O + Luce solare -> C6H12O6 + 6O2." },
+                    { title: "3. Anatomia umana: Apparato locomotore", summary: "L'apparato locomotore umano è costituito dal sistema scheletrico e dal sistema muscolare, che lavorano in stretta sinergia per consentire il movimento e proteggere gli organi interni. Le ossa forniscono sostegno rigido, mentre i muscoli scheletrici generano la forza contraendosi.", example: "Esempio: Le articolazioni si distinguono in fisse, semimobili e mobili a seconda del grado di movimento che consentono alle ossa." },
+                    { title: "4. L'apparato circolatorio e il sangue", summary: "L'apparato circolatorio umano ha il compito di trasportare ossigeno, sostanze nutritive e anidride carbonica in ogni distretto del corpo attraverso una fitta rete di vasi sanguigni. Il cuore funziona come una potente pompa muscolare che spinge il sangue nella circolazione polmonare e corporea.", example: "Esempio: La piccola circolazione trasporta il sangue povero di ossigeno dal cuore ai polmoni per purificarlo e riossigenarlo." }
+                ]
+            },
+            "Terza Media": {
+                "Matematica": [
+                    { title: "1. Equazioni numeriche intere di primo grado", summary: "Un'equazione di primo grado è un'uguaglianza tra due espressioni algebriche in cui l'incognita compare con esponente pari a uno. Attraverso i principi di equivalenza è possibile spostare i termini da un membro all'altro cambiando di segno per isolare l'incognita.", example: "Esempio: Risolvendo l'equazione 3x - 5 = 10, si sposta il -5 ottenendo 3x = 15 e dividendo per 3 si trova x = 5." },
+                    { title: "2. Problemi risolvibili con equazioni di primo grado", summary: "Molti problemi di natura geometrica, numerica o quotidiana possono essere risolti traducendo il testo verbale in un'equazione algebrica di primo grado. L'impostazione corretta della variabile incognita permette di semplificare passaggi logici complessi.", example: "Esempio: I problemi classici sulle età o sui perimetri geometrici si risolvono impostando un'equazione lineare e risolvendola." },
+                    { title: "3. Sistemi lineari di due equazioni in due incognite", summary: "Un sistema lineare raggruppa due o più equazioni di primo grado le cui soluzioni devono soddisfare contemporaneamente tutte le condizioni imposte. Il metodo di sostituzione o il confronto algebrico permettono di determinare l'unica coppia di valori corretta.", example: "Esempio: La soluzione di un sistema rappresenta graficamente il punto esatto di intersezione tra due rette nel piano cartesiano." },
+                    { title: "4. Radicali aritmetici e operazioni", summary: "Il radicale aritmetico è l'operazione inversa dell'elevamento a potenza e permette di trovare quel numero positivo che, elevato a una certa potenza, restituisce il valore iniziale. Le proprietà dei radicali consentono di semplificare espressioni con radici quadrate.", example: "Esempio: La radice quadrata del prodotto di due numeri è uguale al prodotto delle singole radici: radq(36 * 4) = 6 * 2 = 12." }
+                ],
+                "Geometria": [
+                    { title: "1. Geometria solida: Introduzione e poliedri", summary: "La geometria solida studia le figure tridimensionali che occupano una determinata estensione nello spazio, caratterizzate da superficie laterale, totale e volume. I poliedri sono solidi geometrici delimitati da poligoni piani chiamate facce.", example: "Esempio: Il teorema di Eulero stabilisce che in ogni poliedro convesso il numero delle facce plus i vertici è sempre uguale agli spigoli più due." },
+                    { title: "2. Il prisma e il parallelepipedo", summary: "Un prisma è un poliedro caratterizzato da due poligoni uguali e paralleli posti alle estremità come basi, collegati da facce laterali rettangolari. Il parallelepipedo è un particolare prisma le cui facce opposte sono tutte formate da rettangoli congruenti.", example: "Esempio: Il volume di un parallelepipedo si calcola moltiplicando l'area della sua base inferiore per l'altezza complessiva del solido." },
+                    { title: "3. La piramide e il tronco di piramide", summary: "La piramide è un solido geometrico formato da una base poligonale qualsiasi e da facce laterali triangolari che convergono tutte in un unico punto superiore detto vertice. L'apotema della piramide rappresenta l'altezza dei triangoli laterali ed è fondamentale per calcolare la superficie.", example: "Esempio: Il volume di una piramide si calcola moltiplicando l'area di base per l'altezza e dividendo il risultato finale per tre." },
+                    { title: "4. I solidi di rotazione: Cilindro, Cono e Sfera", summary: "I solidi di rotazione si ottengono facendo ruotare una figura piana attorno a un asse di riferimento fisso nello spazio circostante. Cilindro, cono e sfera possiedono formule geometriche avanzate per il calcolo della superficie e del volume basate sul pi greco.", example: "Esempio: Il volume della sfera si calcola con la formula specifica (4/3) * pi * r^3, dove r rappresenta il raggio sferico." }
+                ],
+                "Italiano / Letteratura": [
+                    { title: "1. Dante Alighieri e la Divina Commedia: Introduzione", summary: "La Divina Commedia di Dante Alighieri è il capolavoro assoluto della letteratura italiana ed è un poema allegorico che descrive il viaggio oltretumore del poeta nei tre regni. L'opera unisce una complessa struttura teologica a una profonda riflessione morale e politica sull'Italia medievale.", example: "Esempio: Il poema è suddiviso simmetricamente in tre cantiche: Inferno, Purgatorio e Paradiso, ciascuna composta da trentatré canti." },
+                    { title: "2. L'Inferno di Dante: Canti principali", summary: "La prima cantica della Divina Commedia descrive l'Inferno come un immenso abisso a forma di imbuto roccioso diviso in gironi in base alla gravità dei peccati. Attraverso gli incontri con le anime dannate, Dante esplora le passioni umane più profonde e tragiche.", example: "Esempio: Nel celebre Canto V, Dante incontra i tragici amanti Paolo e Francesca, travolti dalla bufera infernale per la loro passione." },
+                    { title: "3. Il Romanticismo e Alessandro Manzoni", summary: "Il Romanticismo fu un grande movimento culturale europeo che esaltò il sentimento, la storia nazionale, la libertà e la spiritualità religiosa contro il razionalismo illuminista. In Italia il massimo esponente fu Alessandro Manzoni con il suo celebre romanzo storico I Promessi Sposi.", example: "Esempio: I Promessi Sposi ambientati nella Lombardia del Seicento esplorano il tema fondamentale della Provvidenza divina e della giustizia." },
+                    { title: "4. Il Verismo e Giovanni Verga", summary: "Il Verismo fu un movimento letterario italiano della seconda metà dell'Ottocento che cercò di ritrarre la realtà sociale ed economica in modo oggettivo e distaccato. Giovanni Verga applicò questa poetica alla vita dura e immobile dei pescatori siciliani e dei contadini poveri.", example: "Esempio: Nei Malavoglia, Verga descrive la tragica 'fiumana del progresso' e la dura legge economica della fiumana e dell'ostrica." },
+                    { title: "5. Il Novecento: Pirandello, Ungaretti e Montale", summary: "La letteratura del Novecento riflette la profonda crisi dell'identità umana, la frantumazione delle certezze tradizionali e i drammi delle guerre mondiali. Autori come Pirandello rivoluzionarono il teatro e il romanzo, mentre poeti come Ungaretti e Montale rinnovarono radicalmente il linguaggio lirico.", example: "Esempio: La celebre poesia 'Mattina' di Giuseppe Ungaretti condensa in soli due versi la sensazione folgorante dell'infinito." }
+                ],
+                "Storia": [
+                    { title: "1. La Rivoluzione Industriale e il Secolo XIX", summary: "La Rivoluzione Industriale avviata in Inghilterra nel Settecento trasformò radicalmente i sistemi produttivi grazie all'invenzione della macchina a vapore e all'uso del carbon fossile. Nacquero le prime grandi fabbriche moderne e si formò la nuova classe sociale operaia del proletariato urbano.", example: "Esempio: La sostituzione del lavoro artigianale manuale con la produzione meccanizzata seriale aumentò enormemente la produttività." },
+                    { title: "2. Il Risorgimento italiano e l'Unità d'Italia", summary: "Il Risorgimento fu il complesso processo politico e culturale che portò l'Italia alla liberazione dal dominio straniero e all'unificazione nazionale nel 1861. Attraverso i moti insurrezionali, le guerre d'indipendenza e la spedizione dei Mille di Garibaldi si raggiunse il traguardo unitario.", example: "Esempio: Nel marzo del 1861 venne ufficialmente proclamato il Regno d'Italia con capitale provvisoria a Torino." },
+                    { title: "3. L'Imperialismo e la Prima Guerra Mondiale", summary: "Tra la fine dell'Ottocento e l'inizio del Novecento le grandi potenze europee si lanciarono nella conquista coloniale di Africa e Asia, scatenando tensioni culminate nella Prima Guerra Mondiale. Il conflitto fu caratterizzato da una drammatica guerra di posizione e trincea tra il 1914 e il 1918.", example: "Esempio: L'evento scatenante del conflitto fu l'attentato di Sarajevo in cui fu assassinato l'arciduca Francesco Ferdinando." },
+                    { title: "4. Il Fascismo in Italia e il Nazismo in Germania", summary: "La grave crisi economica e sociale del dopoguerra favorì l'affermazione dei regimi totalitari fascista in Italia e nazista in Germania, sopprimendo le libertà democratiche. Questa aggressiva politica estera condusse inevitabilmente allo scoppio della Seconda Guerra Mondiale tra il 1939 e il 1945.", example: "Esempio: La Marcia su Roma dell'ottobre 1922 segnò l'ascesa al potere di Benito Mussolini e la fine dello stato liberale classico." },
+                    { title: "5. La nascita della Repubblica Italiana", summary: "All'indomani della liberazione dal nazifascismo e dalla fine della guerra, gli italiani scelsero la forma istituzionale dello Stato attraverso il referendum del 2 giugno 1946. Nello stesso momento fu eletta l'Assemblea Costituente incaricata di scrivere la nuova Costituzione repubblicana entrata in vigore nel 1948.", example: "Esempio: La Costituzione della Repubblica Italiana entrò ufficialmente in vigore il 1° gennaio 1948 sancendo i principi democratici fondamentali." }
+                ],
+                "Scienze": [
+                    { title: "1. La genetica e le leggi di Mendel", summary: "La genetica è la scienza che studia la trasmissione dei caratteri ereditari dai genitori ai figli attraverso il DNA e i cromosomi cellulari. Le leggi formulate da Gregor Mendel sui piselli odorosi posero le basi matematiche della trasmissione genetica dei caratteri dominanti e recessivi.", example: "Esempio: I caratteri ereditari dominanti si manifestano fenotipicamente anche quando sono presenti in singola copia nel patrimonio genetico." },
+                    { title: "2. La tettonica delle placche e i terremoti", summary: "La litosfera terrestre non è continua, ma è suddivisa in grandi zolle rocciose chiamate placche tettoniche che galleggiano sul mantello sottostante. Il movimento reciproco di queste placche genera faglie, vulcani e violenti terremoti misurati con apposite scale sismiche.", example: "Esempio: I margini di placca convergenti si scontrano generando imponenti catene montuose o zone di profonda subduzione." },
+                    { title: "3. L'universo, le stelle e il sistema solare", summary: "L'astrofisica moderna spiega l'origine dell'universo attraverso la teoria del Big Bang, un'enorme esplosione primordiale avvenuta miliardi di anni fa. All'interno delle stelle avvengono reazioni termonucleari continue che generano energia e distribuiscono elementi chimici nello spazio.", example: "Esempio: La fusione nucleare trasforma l'idrogeno in elio all'interno del nucleo stellare, rilasciando la luce e il calore percepiti." }
+                ]
+            },
+            "Prima Superiore": {
+                "Matematica": [
+                    { title: "1. Insiemi numerici: N, Z, Q, R", summary: "Lo studio approfondito degli insiemi numerici analizza la struttura logica e algebrica dei numeri naturali, interi, razionali e reali. I numeri reali comprendono anche i numeri irrazionali, ovvero quei valori che non possono essere espressi sotto forma di frazione tra interi.", example: "Esempio: La radice quadrata di due, radq(2), è il classico esempio di numero irrazionale con infinite cifre decimali non periodiche." },
+                    { title: "2. Calcolo letterale avanzato e prodotti notevoli", summary: "Il calcolo letterale avanzato introduce regole algebriche complesse per manipolare polinomi e frazioni algebriche attraverso i prodotti notevoli. Queste identità algebriche permettono di eseguire moltiplicazioni rapide senza dover sviluppare tutti i singoli passaggi intermedi.", example: "Esempio: Il cubo di un binomio si sviluppa con la formula fissa (a + b)^3 = a^3 + 3a^2b + 3ab^2 + b^3." },
+                    { title: "3. Scomposizione in fattori dei polinomi (Raccoglimento, Ruffini)", summary: "Scomporre un polinomio significa trasformare una somma algebrica complessa nel prodotto di polinomi di grado inferiore più semplici da studiare. Vengono utilizzati metodi sistematici come il raccoglimento totale, parziale, i prodotti notevoli e la regola di Ruffini.", example: "Esempio: La differenza di due quadrati x^2 - 9 si scompone immediatamente nel prodotto notevole (x - 3)(x + 3)." },
+                    { title: "4. Frazioni algebriche", summary: "Una frazione algebrica è un'espressione letterale in cui l'incognita compare anche al denominatore della frazione. Prima di eseguire qualsiasi operazione o semplificazione, è obbligatorio determinare le condizioni di esistenza imponendo che il denominatore sia diverso da zero.", example: "Esempio: Le condizioni di esistenza (C.E.) escludono tutti quei valori numerici che annullerebbero il denominatore della frazione." }
+                ],
+                "Fisica": [
+                    { title: "1. Le grandezze fisiche e il Sistema Internazionale", summary: "La fisica quantifica lo studio dei fenomeni naturali attraverso grandezze fisiche misurabili suddivise in fondamentali e derivate. Il Sistema Internazionale (SI) stabilisce le unità di misura standard universali per garantire coerenza scientifica a livello globale.", example: "Esempio: Metro, chilogrammo e secondo rappresentano le grandezze fisiche fondamentali primarie del Sistema Internazionale." },
+                    { title: "2. Cinematica: Moto rettilineo uniforme", summary: "La cinematica descrive geometricamente il movimento dei corpi nello spazio senza analizzare le cause che lo hanno provocato. Nel moto rettilineo uniforme il corpo si muove lungo una linea retta mantenendo una velocità costante nel tempo.", example: "Esempio: La legge oraria del moto uniforme è espressa dalla formula lineare s = s0 + v * t." },
+                    { title: "3. Moto uniformemente accelerato", summary: "Il moto uniformemente accelerato descrive il movimento di un corpo che subisce una variazione di velocità costante nel corso del tempo. Un esempio classico e naturale di questo tipo di movimento è rappresentato dalla caduta libera dei corpi nel vuoto.", example: "Esempio: La velocità istantanea si calcola con la relazione lineare v = v0 + a * t." },
+                    { title: "4. I vettori e le forze", summary: "Molte grandezze fisiche non possono essere descritte solo da un numero, ma richiedono l'uso di vettori dotati di modulo, direzione e verso. Le forze vengono trattate come vettori e possono essere sommate geometricamente per determinare la forza risultante applicata.", example: "Esempio: Il metodo punta-coda consente di sommare graficamente due vettori consecutivi nel piano cartesiano." }
+                ],
+                "Chimica": [
+                    { title: "1. La materia e le sue trasformazioni", summary: "La chimica studia la composizione, la struttura e le trasformazioni della materia distinguendo tra sostanze pure e miscugli complessi. I miscugli possono essere omogenei, se appaiono uniformi in ogni punto, o eterogenei, se presentano fasi distinguibili.", example: "Esempio: La distillazione e la filtrazione sono metodi fisici tradizionali utilizzati per separare i componenti di un miscuglio." },
+                    { title: "2. Le leggi ponderali della chimica", summary: "Le leggi ponderali rappresentano le prime fondamentali scoperte quantitative della chimica basate sulla misurazione precisa delle masse prima e dopo le reazioni. La legge di Lavoisier stabilisce che nulla si crea e nulla si distrugge nelle trasformazioni chimiche.", example: "Esempio: La massa totale dei reagenti in un sistema chiuso è sempre perfettamente uguale alla massa totale dei prodotti ottenuti." },
+                    { title: "3. Teoria atomica e struttura dell'atomo", summary: "La teoria atomica moderna descrive l'atomo come la particella fondamentale composta da un nucleo centrale denso e da elettroni periferici. Il nucleo contiene protoni carichi positivamente e neutroni neutri, definendo il numero atomico e di massa.", example: "Esempio: Gli isotopi sono atomi dello stesso elemento chimico che possiedono un diverso numero di neutroni nel nucleo." }
+                ]
+            },
+            "Seconda Superiore": {
+                "Matematica": [
+                    { title: "1. Sistemi lineari di equazioni (Metodi di Cramer, Sostituzione, Riduzione)", summary: "I sistemi lineari mettono a sistema più equazioni di primo grado per trovare soluzioni comuni a tutte le condizioni imposte. Oltre ai metodi algebrici tradizionali, per i sistemi quadrati si utilizza il determinante delle matrici attraverso il metodo di Cramer.", example: "Esempio: Il calcolo del determinante di una matrice quadrata 2x2 permette di risolvere rapidamente sistemi lineari parametrici." },
+                    { title: "2. Radicali reali e loro proprietà", summary: "I radicali reali estendono il calcolo algebrico consentendo di operare con radici n-esime di numeri reali positivi o negativi. La razionalizzazione dei denominatori è una tecnica algebrica fondamentale per eliminare le radici presenti al denominatore di una frazione.", example: "Esempio: Razionalizzare la frazione 2 / radq(3) significa moltiplicare numeratore e denominatore per radq(3)." },
+                    { title: "3. Equazioni di secondo grado (Formula risolutiva e scomposizione)", summary: "Un'equazione di secondo grado presenta l'incognita elevata al quadrato e si risolve analizzando il discriminante delta della formula risolutiva. A seconda del segno del delta, l'equazione può ammettere due soluzioni reali distinte, una sola soluzione doppia o nessuna soluzione reale.", example: "Esempio: La formula generale per trovare le radici reali è x = (-b ± radq(delta)) / 2a." },
+                    { title: "4. Disequazioni di primo e secondo grado", summary: "Una disequazione esprime una disuguaglianza algebrica tra due espressioni in cui l'obiettivo è trovare l'intervallo di valori che la rendono vera. Nel caso delle disequazioni di secondo grado, si studia il segno del trinomio associato sfruttando la parabola corrispondente.", example: "Esempio: Risolvere ax^2 + bx + c > 0 significa determinare per quali intervalli della x il grafico della parabola si trova sopra l'asse x." }
+                ],
+                "Fisica": [
+                    { title: "1. La Dinamica e i Principi di Newton", summary: "La dinamica studia le cause che modificano lo stato di quiete o di movimento dei corpi attraverso i tre famosi principi di Newton. Il secondo principio stabilisce che la forza applicata a un corpo è direttamente proporzionale alla sua massa e all'accelerazione impressa.", example: "Esempio: La forza peso che ci attrae verso la terra si calcola con la relazione fondamentale P = m * g." },
+                    { title: "2. Lavoro ed Energia", summary: "In fisica il lavoro meccanico misura l'energia trasferita a un corpo da una forza che agisce mentre esso compie uno spostamento nello spazio. L'energia cinetica rappresenta l'energia associata al movimento del corpo, mentre l'energia potenziale dipende dalla sua posizione.", example: "Esempio: Il teorema dell'energia cinetica stabilisce che il lavoro totale compiuto su un corpo è uguale alla variazione della sua energia cinetica." },
+                    { title: "3. Conservazione dell'energia meccanica", summary: "Il principio di conservazione dell'energia meccanica afferma che in un sistema isolato in cui agiscono solo forze conservative, l'energia totale si mantiene costante. L'energia può trasformarsi continuamente da cinetica a potenziale senza andare mai perduta.", example: "Esempio: Durante la caduta libera di un grave, l'energia potenziale diminuisce mentre l'energia cinetica aumenta in modo perfettamente speculare." }
+                ],
+                "Chimica": [
+                    { title: "1. La mole e il numero di Avogadro", summary: "La mole è l'unità di misura fondamentale del Sistema Internazionale utilizzata in chimica per contare le entità microscopiche come atomi e molecole. Una mole di qualsiasi sostanza contiene sempre un numero fisso di particelle noto come costante di Avogadro.", example: "Esempio: Il numero di Avogadro corrisponde esattamente a 6,022 * 10^23 entità elementari per ciascuna mole di sostanza." },
+                    { title: "2. La tavola periodica degli elementi", summary: "La tavola periodica organizza tutti gli elementi chimici conosciuti in base al loro numero atomico crescente e alle loro proprietà chimiche periodiche. Gli elementi sono disposti in periodi orizzontali e gruppi verticali che condividono lo stesso numero di elettroni di valenza.", example: "Esempio: L'elettronegatività e il raggio atomico seguono precise tendenze periodiche lungo i gruppi e i periodi della tavola." },
+                    { title: "3. I legami chimici (Ionico, Covalente, Metallico)", summary: "I legami chimici si formano quando gli atomi acquistano, perdono o condividono elettroni di valenza per raggiungere una configurazione elettronica stabile. Il legame ionico si basa sull'attrazione elettrostatica tra ioni di segno opposto, mentre quello covalente sulla condivisione di coppie elettroniche.", example: "Esempio: Nella molecola dell'acqua (H2O) si stabiliscono legami covalenti polari tra l'atomo di ossigeno e i due atomi di idrogeno." }
+                ]
+            },
+            "Terza Superiore": {
+                "Matematica": [
+                    { title: "1. Geometria analitica nel piano cartesiano: La retta", summary: "La geometria analitica studia le figure geometriche traducendole in equazioni algebriche all'interno di un piano cartesiano ortogonale. L'equazione della retta mette in relazione le coordinate x e y attraverso il coefficiente angolare e l'intercetta sull'asse verticale.", example: "Esempio: L'equazione esplicita della retta è y = mx + q, dove m rappresenta la pendenza e q l'intercetta." },
+                    { title: "2. La circonferenza e le coniche (Parabola, Ellisse, Iperbole)", summary: "Le coniche sono curve geometriche ottenute dall'intersezione di un cono circolare retto con un piano inclinato in varie posizioni nello spazio. Oltre alla parabola, lo studio analitico comprende l'ellisse e l'iperbole con le relative equazioni cartesiane standard.", example: "Esempio: L'equazione di una parabola con asse verticale si esprime nella forma generale y = ax^2 + bx + c." },
+                    { title: "3. Esponenziali e Logaritmi", summary: "Le funzioni esponenziali e logaritmiche sono inverse l'una dell'altra e descrivono fenomeni di crescita o decadimento molto rapidi in natura. I logaritmi consentono di semplificare il calcolo degli esponenti attraverso proprietà algebriche fondamentali.", example: "Esempio: Il logaritmo di un prodotto è uguale alla somma dei singoli logaritmi: log_a(x * y) = log_a(x) + log_a(y)." }
+                ],
+                "Fisica": [
+                    { title: "1. Termodinamica: Temperatura e calore", summary: "La termodinamica studia gli scambi di calore e di energia nei sistemi fisici macroscopici in relazione alla temperatura. Il calore rappresenta energia termica in transito da un corpo a temperatura maggiore verso uno a temperatura inferiore.", example: "Esempio: La quantità di calore scambiata si calcola con la formula Q = c * m * DeltaT in base al calore specifico." },
+                    { title: "2. I principi della termodinamica", summary: "I principi della termodinamica fissano le leggi universali che governano la conservazione dell'energia e la direzione irreversibile dei processi fisici. Il primo principio sancisce la conservazione dell'energia, mentre il secondo introduce il concetto di entropia e limiti termici.", example: "Esempio: Il rendimento massimo teorico di una macchina termica ciclica è definito dal ciclo ideale di Carnot." }
+                ],
+                "Filosofia": [
+                    { title: "1. La filosofia antica: I presocratici, Platone e Aristotele", summary: "La filosofia antica occidentale nacque in Grecia interrogandosi sull'origine primordiale del cosmo e culminando nei grandi sistemi metafisici di Platone e Aristotele. Platone elaborò la celebre teoria delle idee trascendenti, mentre Aristotele fondò la logica formale e la classificazione scientifica.", example: "Esempio: Il mondo sensibile secondo Platone rappresenta solo una copia imperfetta del mondo ideale eterno." },
+                    { title: "2. La filosofia medievale e la Patristica", summary: "La filosofia medievale cercò di conciliare la rivelazione cristiana con la grande tradizione speculativa della filosofia classica greca. Figure come Agostino d'Ippona e Tommaso d'Aquino elaborarono complesse sintesi teologiche e filosofiche sulla natura di Dio.", example: "Esempio: Le cinque celebri vie di Tommaso d'Aquino costituiscono prove logiche e razionali dell'esistenza di Dio." }
+                ]
+            },
+            "Quarta Superiore": {
+                "Matematica": [
+                    { title: "1. Goniometria e Trigonometria", summary: "La goniometria studia la misurazione degli angoli e definisce le funzioni goniometriche fondamentali come seno, coseno e tangente sulla circonferenza trigonometrica. La trigonometria applica questi concetti al calcolo geometrico completo dei triangoli qualsiasi.", example: "Esempio: La relazione fondamentale della goniometria stabilisce che per qualsiasi angolo vale sin^2(x) + cos^2(x) = 1." },
+                    { title: "2. Teoremi sui triangoli rettangoli e qualunque", summary: "I teoremi trigonometrici consentono di risolvere qualsiasi triangolo determinando lati e angoli ignoti a partire da poche informazioni note. Il teorema dei seni e il teorema del coseno estendono la geometria oltre i limiti del teorema di Pitagora.", example: "Esempio: Il teorema del coseno (o di Carnot) generalizza il teorema di Pitagora per un triangolo qualsiasi." },
+                    { title: "3. Numeri complessi", summary: "I numeri complessi estendono l'insieme dei numeri reali introducendo l'unità immaginaria i, definita come la radice quadrata di meno uno. Vengono rappresentati in forma algebrica o trigonometrica all'interno del piano di Gauss.", example: "Esempio: Per definizione algebrica, l'unità immaginaria al quadrato restituisce sempre il valore negativo i^2 = -1." }
+                ],
+                "Filosofia": [
+                    { title: "1. La rivoluzione scientifica e Cartesio", summary: "La rivoluzione scientifica del Seicento spazzò via la visione aristotelicomedievale del cosmo inaugurando il metodo sperimentale moderno. René Cartesio pose le fondamenta del razionalismo filosofico moderno attraverso il celebre dubbio metodico e la certezza del cogito.", example: "Esempio: La celebre formula cartesiana «Cogito, ergo sum» dimostra l'esistenza del soggetto pensante come prima verità indiscutibile." },
+                    { title: "2. L'Illuminismo e Kant", summary: "L'Illuminismo fu il grande movimento culturale del Settecento che esaltò la ragione critica contro ogni forma di dogmatismo e pregiudizio politico o religioso. Immanuel Kant operò una rivoluzione copernicana filosofica analizzando i limiti e le possibilità conoscitive della ragione umana.", example: "Esempio: La Critica della ragion pura analizza le categorie trascendentali a priori che rendono possibile la conoscenza scientifica." },
+                    { title: "3. Hegel e l'Idealismo tedesco", summary: "Georg Wilhelm Friedrich Hegel fu il massimo esponente dell'idealismo tedesco, elaborando un sistema filosofico totalizzante basato sul divenire dello Spirito. La dialettica hegeliana interpreta la realtà attraverso il triplice movimento di tesi, antitesi e sintesi.", example: "Esempio: La celebre frase hegeliana «Tutto ciò che è razionale è reale, e tutto ciò che è reale è razionale» sintetizza l'identità tra ragione e realtà." }
+                ]
+            },
+            "Quinta Superiore": {
+                "Matematica": [
+                    { title: "1. I Limiti di funzioni", summary: "Il calcolo dei limiti rappresenta il concetto fondamentale dell'analisi matematica e serve a studiare il comportamento di una funzione al avvicinarsi a un determinato valore o all'infinito. Attraverso definizioni rigorose e teoremi specifici si risolvono anche le forme indeterminate.", example: "Esempio: Il limite notevole per x che tende all'infinito di (1 + 1/x)^x definisce esattamente il numero di Nepero e." },
+                    { title: "2. Funzioni continue e punti di discontinuità", summary: "Una funzione si dice continua quando il suo grafico può essere disegnato senza mai sollevare la matita dal foglio, senza interruzioni o salti improvvisi. I punti di discontinuità si classificano in tre specie diverse a seconda del comportamento dei limiti destro e sinistro.", example: "Esempio: Una discontinuità di prima specie si verifica quando i limiti destro e sinistro sono finiti ma diversi tra loro, creando un salto." },
+                    { title: "3. Le Derivate e le regole di derivazione", summary: "La derivata di una funzione rappresenta geometricamente il coefficiente angolare della retta tangente al grafico in un dato punto e misura la velocità di variazione. Le regole di derivazione consentono di calcolare rapidamente le derivate di funzioni algebriche e trascendenti.", example: "Esempio: La regola di derivazione di una potenza stabilisce che la derivata di x^n è pari al prodotto n * x^(n-1)." },
+                    { title: "4. Studio di funzione completo", summary: "Lo studio di funzione completo è un procedimento analitico sistematico che permette di tracciare con precisione il grafico di una funzione nel piano cartesiano. Richiede l'analisi di dominio, simmetrie, intersezioni, segno, limiti agli estremi, derivata prima e derivata seconda.", example: "Esempio: Lo studio della derivata prima individua gli intervalli di crescenza e decrescenza e i relativi punti di massimo e minimo." },
+                    { title: "5. Gli Integrali indefiniti e definiti", summary: "Il calcolo integrale rappresenta l'operazione inversa della derivazione ed è fondamentale per determinare le aree sottese dai grafici di funzioni continue. L'integrale indefinito individua la famiglia delle funzioni primitive, mentre quello definito calcola un valore numerico preciso.", example: "Esempio: L'integrale immediato di x^n dx si risolve aggiungendo uno all'esponente e dividendo per il nuovo esponente: (x^(n+1))/(n+1) + C." }
+                ],
+                "Fisica": [
+                    { title: "1. Elettricità e Legge di Coulomb", summary: "L'elettrostatica studia le cariche elettriche stazionarie e le forze di interazione reciproca descritte dalla legge di Coulomb. Il campo elettrico rappresenta la perturbazione dello spazio circostante generata dalla presenza di cariche elettriche.", example: "Esempio: La forza elettrostatica tra due cariche puntiformi è inversamente proporzionale al quadrato della loro distanza." },
+                    { title: "2. Corrente elettrica e Leggi di Ohm", summary: "La corrente elettrica consiste in un flusso ordinato di cariche elettriche all'interno di un conduttore metallico sottoposto a una differenza di potenziale. Le leggi di Ohm mettono in relazione tensione, corrente e resistenza elettrica nei circuiti.", example: "Esempio: La prima legge di Ohm stabilisce la proporzionalità lineare tra tensione e corrente attraverso la formula V = R * I." },
+                    { title: "3. Elettromagnetismo e Campi Magnetici", summary: "L'elettromagnetismo unifica i fenomeni elettrici e magnetici dimostrando che le correnti elettriche generano campi magnetici e viceversa. Le leggi di Faraday-Neumann-Lenz descrivono l'induzione elettromagnetica in un circuito.", example: "Esempio: La forza di Lorentz descrive l'azione esercitata da un campo magnetico su una carica elettrica in movimento." },
+                    { title: "4. La Relatività Ristretta di Einstein", summary: "La teoria della relatività ristretta formulata da Albert Einstein rivoluzionò i concetti classici di spazio e tempo assoluto basandosi su due postulati fondamentali. Essa dimostra che la velocità della luce nel vuoto è costante e introduce la dilatazione temporale.", example: "Esempio: La celebre equazione di equivalenza tra massa ed energia si esprime nella formula universale E = mc^2." }
+                ],
+                "Italiano e Letteratura": [
+                    { title: "1. Il decadentismo europeo e italiano", summary: "Il Decadentismo fu un vasto movimento culturale ed artistico di fine Ottocento che rifiutò il positivismo scientifico esaltando l'estetismo, l'irrazionalismo e la sensibilità artistica. In Italia il massimo interprete fu Gabriele D'Annunzio con il culto della bellezza e del superuomo.", example: "Esempio: Il romanzo 'Il piacere' di D'Annunzio incarna perfettamente i canoni dell'estetismo decadente e della ricerca del bello." },
+                    { title: "2. Luigi Pirandello e la crisi dell'Io", summary: "La produzione letteraria di Luigi Pirandello riflette la profonda crisi dell'identità individuale e la frantumazione dell'Io nel mondo moderno. Attraverso l'umorismo, Pirandello mostra come le maschere sociali imposte dalla vita soffochino la vera personalità autentica.", example: "Esempio: Il romanzo 'Uno, nessuno e centomila' esplora la progressiva dissoluzione dell'identità personale del protagonista." },
+                    { title: "3. Italo Svevo e la psicoanalisi nella letteratura", summary: "Italo Svevo rinnovò profondamente la narrativa italiana introducendo i temi della psicoanalisi freudiana, dell'inettitudine e della coscienza interiore. Nei suoi capolavori descrive la complessa psicologia di personaggi incapaci di adattarsi alla vita borghese.", example: "Esempio: 'La coscienza di Zeno' analizza con ironia e introspezione la nevrosi del protagonista attraverso le pagine di un diario." },
+                    { title: "4. Giuseppe Ungaretti, Eugenio Montale e Umberto Saba", summary: "La poesia italiana del Novecento raggiunse vette straordinarie con la ricerca della parola essenziale di Ungaretti, l'oggettismo correlativo di Montale e la sincerità di Saba. Questi poeti interpretarono il disagio esistenziale del secolo breve.", example: "Esempio: La raccolta 'Ossi di seppia' di Eugenio Montale esprime il 'secco' paesaggio ligure come correlativo oggettivo del male di vivere." }
+                ],
+                "Filosofia": [
+                    { title: "1. Schopenhauer, Kierkegaard e Nietzsche", summary: "La filosofia della crisi dell'Ottocento demolì i sistemi hegeliani tradizionali esplorando il pessimismo metafisico, l'angoscia esistenziale e la volontà di potenza. Friedrich Nietzsche annunciò la morte di Dio e l'avvento del superuomo oltrepassando la morale tradizionale.", example: "Esempio: Il concetto di eterno ritorno dell'uguale rappresenta una delle pietre miliari della filosofia di Nietzsche." },
+                    { title: "2. Karl Marx e il Materialismo Storico", summary: "Karl Marx elaborò una critica radicale dell'economia politica capitalista fondando il materialismo storico, secondo cui la struttura economica determina la sovrastruttura sociale. L'analisi dell'alienazione e del plusvalore svela le contraddizioni dello sfruttamento operaio.", example: "Esempio: Marx definì ironicamente la religione come «l'oppio dei popoli», utilizzata dalle classi dominanti per alleviare le sofferenze terrene." },
+                    { title: "3. Sigmund Freud e la nascita della Psicoanalisi", summary: "Sigmund Freud fondò la psicoanalisi rivoluzionando la concezione della mente umana con la scoperta dell'inconscio e della divisione psichica tra Es, Io e Super-io. L'interpretazione dei sogni e la rimozione divennero strumenti terapeutici fondamentali.", example: "Esempio: I meccanismi di difesa dell'Io proteggono la psiche dai conflitti interiori attraverso la rimozione di ricordi traumatici." }
+                ]
+            },
+            "Specializzato": {
+                "Computer Science": [
+                    { title: "1. Algoritmi e Struttura Dati Avanzate", summary: "Lo studio avanzato dell'informatica analizza strutture dati complesse come alberi binari di ricerca, grafi e tabelle hash ottimizzate per grandi moli di dati. La notazione O-grande valuta rigorosamente l'efficienza temporale e spaziale degli algoritmi di ordinamento.", example: "Esempio: Gli algoritmi di ordinamento avanzati come QuickSort e MergeSort garantiscono un'efficienza logaritmica pari a O(n log n)." },
+                    { title: "2. Programmazione ad Oggetti (OOP)", summary: "La programmazione orientata agli oggetti (OOP) è un paradigma di sviluppo software basato sui concetti di classe, istanza, incapsulamento, ereditarietà e polimorfismo. Questo approccio migliora drasticamente la modularità, la manutenzione e il riuso del codice sorgente.", example: "Esempio: L'ereditarietà consente a una nuova classe di derivare proprietà e metodi da una classe preesistente evitando duplicazioni." },
+                    { title: "3. Database relazionali e SQL", summary: "I database relazionali memorizzano informazioni strutturate in tabelle collegate tra loro da relazioni logiche rigorose gestite tramite il linguaggio SQL. Le operazioni di normalizzazione e l'uso di query complesse garantiscono l'integrità dei dati transazionali.", example: "Esempio: L'istruzione SQL 'SELECT * FROM studenti JOIN corsi...' unisce i dati di due tabelle differenti in base a una chiave comune." }
+                ],
+                "Artificial Intelligence": [
+                    { title: "1. Machine Learning supervisionato e non", summary: "Il machine learning studia algoritmi in grado di apprendere automaticamente dai dati senza essere esplicitamente programmati per ogni regola logica. Si suddivide in apprendimento supervisionato, non supervisionato e per rinforzo per risolvere problemi predittivi.", example: "Esempio: L'overfitting si verifica quando un modello apprende troppo i dati di addestramento perdendo la capacità di generalizzare." },
+                    { title: "2. Deep Learning e Reti Neurali", summary: "Il deep learning utilizza reti neurali artificiali profonde ispirate alla struttura biologica del cervello umano per elaborare dati complessi e multimediali. Architetture avanzate come le CNN e i transformer hanno rivoluzionato l'intelligenza artificiale moderna.", example: "Esempio: Il processo di backpropagation calcola il gradiente dell'errore aggiornando iterativamente i pesi sinaptici della rete." }
+                ],
+                "Economics": [
+                    { title: "1. Microeconomia: Mercati e Teoria del Consumatore", summary: "La microeconomia analizza il comportamento economico dei singoli agenti, come i consumatori e le imprese, e le dinamiche di formazione dei prezzi nei mercati. Le curve di domanda e offerta determinano l'equilibrio concorrenziale e le forme di mercato imperfetto.", example: "Esempio: Il monopolio rappresenta una forma di mercato in cui un'unica impresa controlla interamente l'offerta di un bene." },
+                    { title: "2. Macroeconomia: PIL, inflazione e politiche monetarie", summary: "La macroeconomia studia il sistema economico nel suo complesso analizzando indicatori aggregati come il Prodotto Interno Lordo, l'inflazione e la disoccupazione. Le banche centrali utilizzano la politica monetaria per stabilizzare i cicli economici e controllare i tassi d'interesse.", example: "Esempio: Il quantitative easing rappresenta una manovra di politica monetaria non convenzionale per stimolare l'economia in crisi." }
+                ]
+            }
+        };
+
+        let currentGradeFilter = 'all';
+        let currentSelectedGrade = '';
+        let currentSelectedSubject = '';
+        let currentSubjectLessons = [];
+
+        function initApp() {
+            renderSubjects();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            
+            if (tabId === 'dashboard' || tabId === 'calculator') {
+                document.getElementById(tabId).classList.add('active');
+                if (tabId === 'dashboard') document.getElementById('tabBtnDashboard').classList.add('active');
+                if (tabId === 'calculator') document.getElementById('tabBtnCalculator').classList.add('active');
+            } else if (tabId === 'lessonsView') {
+                document.getElementById('lessonsView').classList.add('active');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setGradeFilter(grade, btn) {
+            currentGradeFilter = grade;
+            document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderSubjects();
+        }
+
+        function renderSubjects() {
+            const container = document.getElementById('subjectsContainer');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            let html = '';
+
+            const gradesToDisplay = currentGradeFilter === 'all' 
+                ? Object.keys(schoolDatabase) 
+                : [currentGradeFilter];
+
+            gradesToDisplay.forEach(gradeKey => {
+                const subjectsObj = schoolDatabase[gradeKey];
+                if (!subjectsObj) return;
+                const subjects = Object.keys(subjectsObj);
+                const filteredSubjects = subjects.filter(sub => sub.toLowerCase().includes(searchTerm));
+
+                if (filteredSubjects.length > 0) {
+                    const isSpecialized = gradeKey === 'Specializzato';
+                    const titleIcon = isSpecialized ? '🔬' : '📚';
+                    const badgeText = isSpecialized ? 'Specializzato / Universitario' : gradeKey;
+                    
+                    html += `<div class="category-title">${titleIcon} ${gradeKey}</div>`;
+                    html += `<div class="subject-grid">`;
+                    filteredSubjects.forEach(sub => {
+                        html += `
+                            <div class="subject-card ${isSpecialized ? 'specialized' : ''}" onclick="openSubjectLessons('${gradeKey}', '${sub}')">
+                                <div class="subject-name">${sub}</div>
+                                <span class="subject-badge ${isSpecialized ? 'specialized' : ''}">${badgeText}</span>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+            });
+
+            if (html === '') {
+                html = `<p style="text-align: center; color: var(--text-muted); padding: 4rem 0;">Nessuna materia trovata per "${searchTerm}".</p>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function filterSubjects() {
+            renderSubjects();
+        }
+
+        function openSubjectLessons(gradeKey, subjectName) {
+            currentSelectedGrade = gradeKey;
+            currentSelectedSubject = subjectName;
+            currentSubjectLessons = schoolDatabase[gradeKey][subjectName] || [];
+
+            document.getElementById('lessonsHeader').innerHTML = `
+                <h2 style="color: var(--accent); font-size: 1.6rem; margin-top: 1rem;">📖 ${subjectName}</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Grado / Indirizzo: <strong>${gradeKey}</strong> — Programma completo (${currentSubjectLessons.length} lezioni disponibili).</p>
+            `;
+
+            document.getElementById('lessonSearchInput').value = '';
+            renderLessonsSidebar(currentSubjectLessons);
+            
+            document.getElementById('lessonDetailPanel').innerHTML = `
+                <div class="output-placeholder">Seleziona una lezione dalla lista a sinistra per visualizzare la spiegazione dettagliata e gli esempi.</div>
+            `;
+
+            switchTab('lessonsView');
+        }
+
+        function renderLessonsSidebar(lessons) {
+            const sidebar = document.getElementById('lessonsSidebarList');
+            let html = '';
+            if (lessons.length === 0) {
+                html = `<p style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem; text-align: center;">Nessuna lezione trovata.</p>`;
+            } else {
+                lessons.forEach((les, index) => {
+                    html += `<div class="lesson-item" onclick="showLessonDetail(${index}, this)">${les.title}</div>`;
+                });
+            }
+            sidebar.innerHTML = html;
+        }
+
+        function filterLessonsList() {
+            const query = document.getElementById('lessonSearchInput').value.toLowerCase();
+            const filtered = currentSubjectLessons.filter(l => l.title.toLowerCase().includes(query) || l.summary.toLowerCase().includes(query));
+            renderLessonsSidebar(filtered);
+        }
+
+        function showLessonDetail(index, element) {
+            document.querySelectorAll('.lesson-item').forEach(el => el.classList.remove('active'));
+            if(element) element.classList.add('active');
+
+            const lesson = currentSubjectLessons[index];
+            const panel = document.getElementById('lessonDetailPanel');
+
+            panel.innerHTML = `
+                <h2>🎯 ${lesson.title}</h2>
+                <div class="lesson-summary">
+                    <strong>Spiegazione dettagliata:</strong><br><br>
+                    ${lesson.summary}
+                </div>
+                <div class="lesson-examples">
+                    💡 <strong>Applicazione Pratica ed Esempio:</strong><br><br>
+                    ${lesson.example}
+                </div>
+            `;
+        }
+
+        /* Scientific Calculator Logic & History */
+        let calcDisplayValue = '0';
+        let calcHistoryArray = [];
+
+        function updateCalcDisplay() {
+            document.getElementById('calcDisplay').innerText = calcDisplayValue;
+        }
+
+        function appendCalc(val) {
+            if (calcDisplayValue === '0' && val !== '.' && !['**', '*', '/', '+', '-'].includes(val)) {
+                calcDisplayValue = val;
+            } else if (calcDisplayValue === 'Errore') {
+                calcDisplayValue = val;
+            } else {
+                calcDisplayValue += val;
+            }
+            updateCalcDisplay();
+        }
+
+        function clearCalc() {
+            calcDisplayValue = '0';
+            updateCalcDisplay();
+        }
+
+        function backspaceCalc() {
+            if (calcDisplayValue.length > 1) {
+                calcDisplayValue = calcDisplayValue.slice(0, -1);
+            } else {
+                calcDisplayValue = '0';
+            }
+            updateCalcDisplay();
+        }
+
+        function calculateResult() {
+            try {
+                let expr = calcDisplayValue
+                    .replace(/×/g, '*')
+                    .replace(/÷/g, '/');
+
+                let evaluated = eval(expr);
+                let formattedResult = Number.isFinite(evaluated) ? parseFloat(evaluated.toFixed(10)) : 'Errore';
+                
+                addHistory(calcDisplayValue, formattedResult);
+                calcDisplayValue = String(formattedResult);
+            } catch (error) {
+                calcDisplayValue = 'Errore';
+            }
+            updateCalcDisplay();
+        }
+
+        function addHistory(expression, result) {
+            const historyContainer = document.getElementById('calcHistory');
+            if (calcHistoryArray.length === 0) {
+                historyContainer.innerHTML = '';
+            }
+            calcHistoryArray.unshift({ expr: expression, res: result });
+            
+            let html = '';
+            calcHistoryArray.forEach(item => {
+                html += `<div style="margin-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem; font-style: normal;">
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">${item.expr}</div>
+                    <div style="font-size: 1.1rem; color: white; font-weight: 600;">= ${item.res}</div>
+                </div>`;
+            });
+            historyContainer.innerHTML = html;
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
