@@ -1,1 +1,1 @@
-to get into the website go to: https://boltgamingofficial.github.io/omnilearn-hub/omni_learn_hub.html
+Join my discord server too for future updates or projects: https://discord.gg/xZPkNnrb8
